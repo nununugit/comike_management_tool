@@ -31,7 +31,7 @@
         }
         if (empty($p_initial)||empty($p_number)||empty($t_price)||empty($c_name)){
                 echo "<br>";
-                echo '<div class="alert alert-primary" role="alert"><strong>文字を入力してください</strong></div>';
+                echo '<script>alert("入力してね")</script>';
         }else{
             date_default_timezone_set('Asia/Tokyo');
             $timestamp = time() ;
@@ -53,7 +53,7 @@
             echo $p_number;
             if (empty($priority)||empty($position)||empty($t_price1)||empty($target)||empty($t_price)){
                 echo "<br>";
-                echo '<div class="alert alert-primary" role="alert"><strong>文字を入力してください</strong></div>';
+                echo '<script>alert("入力してね")</script>';
             }else{
             date_default_timezone_set('Asia/Tokyo');
             $timestamp = time() ;
@@ -86,7 +86,7 @@
     </head>
     <body>
     <script src= "comike_jquery.js"></script>
-    <ul>
+    <ul id="list">
         <li>同人登録</li>
         <li>企業登録</li>
         <li>同人リスト</li>
