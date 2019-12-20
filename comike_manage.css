@@ -1,9 +1,14 @@
 
-.nav-var li{
+#list{
     float: right;
-    margin-right:20px;
+    margin-right: 20px;
     color: #ffffff;
+    list-style: none;
+    background-color:blue;
 }
 #center{
     text-align: center;
+}
+body{
+    color: #ffff00;
 }
