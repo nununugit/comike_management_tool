@@ -13,6 +13,13 @@
             while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
                 $data[]=$row;
             }
+            $sql2="select SUM(target_price) as total from comike_management_doujin WHERE delete_flag=0;";
+            $stmt=$dbh->prepare($sql2);
+            $stmt->execute();
+            $count = $stmt->rowCount();
+            while($row2 = $stmt->fetch(PDO::FETCH_ASSOC)){
+                $data2[]=$row2;
+            }
         }catch(PDOException $e){
             print ($e->getMessage());
             die();
@@ -22,6 +29,7 @@
             $p_initial = @$_POST['p_initial'];
             $date = @$_POST['date'];
             $p_number = @$_POST['p_number'];
+            $twitter = @$_POST['twitter'];
             $c_name = @$_POST['c_name'];
             $t_price = @$_POST['t_price'];
             $t = @$_POST['t'];
@@ -33,7 +41,7 @@
             date_default_timezone_set('Asia/Tokyo');
             $timestamp = time() ;
             $now= date( "Y/m/d H:i:s", $timestamp );
-            $sql = "INSERT INTO comike_management_doujin VALUES( '',$date,'$p_initial', '$p_number','$c_name','$t', '$t_price','$now',0,'$priority' );";
+            $sql = "INSERT INTO comike_management_doujin VALUES( '',$date,'$p_initial', '$p_number','$c_name','$twitter','$t', '$t_price','$now',0,'$priority' );";
             $result = $dbh ->query($sql);
             if(!$result){
                 die($dbh ->error);
@@ -64,7 +72,6 @@
             }
             header('Location: ./comic_market_manage.php');
         }
-        
         //個別削除
         }if(isset($_GET['id'])){
                     $id =  @$_GET['id'];
@@ -87,13 +94,13 @@
     <script src= "comike_jquery.js"></script>
     <nav>
     <ul>
-        <li class="current" id="doujinres" ><p>同人登録</p></li>
-        <li><p id="doujinlist">同人リスト</p></li>
-        <li><p id="companyres">企業登録</p></li>
-        <li><p id="companylist">企業リスト</p></li>
+        <li class="current" id="doujinres" ><h3>同人登録</h3></li>
+        <li id="doujinlist"><h3>同人リスト</h3></li>
+        <li id="companyres"><h3>企業登録</h3></li>
+        <li id="companylist"><h3>企業リスト</h3></li>
     </ul>
     </nav>
-    <div class="active" id="doujin1">
+    <div id="doujin1">
         <form action="comic_market_manage.php"  method="post">
         <div class="form-group"><p>
             <br>
@@ -112,6 +119,10 @@
         サークル名:<br>
         <input type="text" placeholder="サークルの名前か作者の名前" name="c_name" size="40">
         </p>
+        twitter:<br>
+        <input type="text" placeholder="twitterのアカウント" name="twitter" size="40">
+        </p>
+        
         買うもの:<br>
         <input type="text" placeholder="買うもん" name="t" size="40">
         </p>
@@ -122,21 +133,29 @@
         <input class="btn btn-primary mb-2" type="submit" name="投稿" >
         <input class="btn btn-primary mb-2" type="reset" value="リセット">        
         </form>
+        <?php foreach($data2 as $row2){?>
+        <?php echo $row2['total'];?>
+        <?php }?>
+
     </div>
         <!-- ここまで同人入力欄 -->
 
-    <div class="inactive" id="doujin2">
+    <div  id="doujin2">
         <div class="table-responsive">
+        <?php foreach($data2 as $row2){?>
+        <h1 id="center">合計金額　<?php echo $row2['total'];?>円</h1>
+        <?php }?>
             <table class="table">
         <thead class="thead-dark">
-        <tr><th>日付け</th><th>優先度</th><th>場所</th><th>番号</th><th>サークル名または作者名</th><th>買うもの</th><th>値段</th><th>削除ボタン</th></tr>
+        <tr><th>日付け</th><th>優先度</th><th>場所</th><th>番号</th><th>サークル名または作者名</th><th>twitter名</th><th>買うもの</th><th>値段</th><th>削除ボタン</th></tr>
         <?php foreach($data as $row){ ?>
             <tr>
             <td id="center"><?php echo htmlentities( $row['date'], ENT_QUOTES, 'UTF-8');?>日目</td>
             <td id="center"><?php echo htmlentities( $row['priority'], ENT_QUOTES, 'UTF-8');?></td>
             <td id="center"><?php echo htmlentities( $row['position_initial'], ENT_QUOTES, 'UTF-8');?></td>
-            <td id="center"><?php echo htmlentities( $row['position_number'], ENT_QUOTES, 'UTF-8');;?></td>
+            <td id="center"><?php echo htmlentities( $row['position_number'], ENT_QUOTES, 'UTF-8');?></td>
             <td id="center"><?php echo htmlentities( $row['circle_name'], ENT_QUOTES, 'UTF-8');?></td>
+            <td id="center"><a href="<?php echo htmlentities( $row['twitter'], ENT_QUOTES, 'UTF-8');?>">twitterアカウント<a></td>
             <td id="center"><?php echo htmlentities( $row['target'], ENT_QUOTES, 'UTF-8');?></td>
             <td id="center"><?php echo htmlentities( $row['target_price'], ENT_QUOTES, 'UTF-8');?></td>
             
@@ -168,7 +187,7 @@
         }
     ?>
 
-    <div class="inactive" id="company1">
+    <div  id="company1">
         <form action="comic_market_manage.php"  method="post">
         <div class="form-group"><p>
             <br>
@@ -194,7 +213,7 @@
     </div>
         <!-- ここまで企業入力欄 -->
 
-    <div class="inactive" id="company2">
+    <div  id="company2">
         <div class="table-responsive">
             <table class="table">
         <thead class="thead-dark">
