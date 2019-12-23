@@ -1,13 +1,35 @@
-
-#list{
-    float: right;
-    margin-right: 20px;
-    color: #ffffff;
-    list-style: none;
-}
 #center{
     text-align: center;
+}
+
+.inactive{
+    display: none;
 }
 body{
     color: #ffff00;
 }
+nav ul{
+    display: table;
+    margin: 0 auto;
+    padding: 0 ;
+    width: 80%;
+    text-align: center;
+    }
+    nav li{
+    display: table-cell;
+    min-width: 50px;
+    }
+    nav p{
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    color: #555;
+    padding-bottom: 5px;
+    }
+    nav li.current{
+    border-bottom: 3px solid #92D050;
+    }
+    nav li:hover{
+    color:blue;
+    border-bottom: 3px solid blue;
+    }

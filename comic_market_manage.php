@@ -26,10 +26,7 @@
             $t_price = @$_POST['t_price'];
             $t = @$_POST['t'];
             $priority = @$_POST['priority'];
-            echo $p_initial;
-            echo $p_number;
-        }
-        if (empty($p_initial)||empty($p_number)||empty($t_price)||empty($c_name)){
+            if (empty($p_initial)||empty($p_number)||empty($t_price)||empty($c_name)){
                 echo "<br>";
                 echo '<script>alert("入力してね")</script>';
         }else{
@@ -42,6 +39,8 @@
                 die($dbh ->error);
             }
             header('Location: ./comic_market_manage.php');
+        }
+        
         }
         if(isset($_POST['target_company'])){
             $priority = @$_POST['priority'];
@@ -86,14 +85,15 @@
     </head>
     <body>
     <script src= "comike_jquery.js"></script>
-    <ul id="list">
-        <li>同人登録</li>
-        <li>企業登録</li>
-        <li>同人リスト</li>
-        <li>企業リスト</li>
+    <nav>
+    <ul>
+        <li class="current" id="doujinres" ><p>同人登録</p></li>
+        <li><p id="doujinlist">同人リスト</p></li>
+        <li><p id="companyres">企業登録</p></li>
+        <li><p id="companylist">企業リスト</p></li>
     </ul>
-
-    <div class="active">
+    </nav>
+    <div class="active" id="doujin1">
         <form action="comic_market_manage.php"  method="post">
         <div class="form-group"><p>
             <br>
@@ -125,7 +125,7 @@
     </div>
         <!-- ここまで同人入力欄 -->
 
-    <div class="inactive">
+    <div class="inactive" id="doujin2">
         <div class="table-responsive">
             <table class="table">
         <thead class="thead-dark">
@@ -168,7 +168,7 @@
         }
     ?>
 
-    <div class="active">
+    <div class="inactive" id="company1">
         <form action="comic_market_manage.php"  method="post">
         <div class="form-group"><p>
             <br>
@@ -194,7 +194,7 @@
     </div>
         <!-- ここまで企業入力欄 -->
 
-    <div class="inactive">
+    <div class="inactive" id="company2">
         <div class="table-responsive">
             <table class="table">
         <thead class="thead-dark">
