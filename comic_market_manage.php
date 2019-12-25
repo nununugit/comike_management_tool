@@ -25,7 +25,7 @@
             die();
         }
             //テーブルへの登録
-        if(isset($_POST['p_initial'])){
+        if(isset($_POST['res'])){
             $p_initial = @$_POST['p_initial'];
             $date = @$_POST['date'];
             $p_number = @$_POST['p_number'];
@@ -37,7 +37,7 @@
             if (empty($p_initial)||empty($p_number)||empty($t_price)||empty($c_name)){
                 echo "<br>";
                 echo '<script>alert("入力してね")</script>';
-        }else{
+            }else{
             date_default_timezone_set('Asia/Tokyo');
             $timestamp = time() ;
             $now= date( "Y/m/d H:i:s", $timestamp );
@@ -49,8 +49,7 @@
             header('Location: ./comic_market_manage.php');
         }
         
-        }
-        if(isset($_POST['target_company'])){
+        }if(isset($_POST['target_company'])){
             $priority = @$_POST['priority'];
             $position = @$_POST['position'];
             $t_company = @$_POST['t_company'];
@@ -72,6 +71,7 @@
             }
             header('Location: ./comic_market_manage.php');
         }
+
         //個別削除
         }if(isset($_GET['id'])){
                     $id =  @$_GET['id'];
@@ -81,7 +81,9 @@
                         die($dbh ->error);
                     }
                     header('Location: ./comic_market_manage.php');
-                }?>
+                }  ?>
+        
+                
 <!DOCTYPE html>
 <html>
     <head>
@@ -100,6 +102,7 @@
         <li id="companylist"><h3>企業リスト</h3></li>
     </ul>
     </nav>
+
     <div id="doujin1">
         <form action="comic_market_manage.php"  method="post">
         <div class="form-group"><p>
@@ -130,12 +133,9 @@
         <input type="text" placeholder="いくら？" name="t_price" size="40">
         </p>
         </div>
-        <input class="btn btn-primary mb-2" type="submit" name="投稿" >
+        <input class="btn btn-primary mb-2" type="submit" value="投稿" name="res" >
         <input class="btn btn-primary mb-2" type="reset" value="リセット">        
         </form>
-        <?php foreach($data2 as $row2){?>
-        <?php echo $row2['total'];?>
-        <?php }?>
 
     </div>
         <!-- ここまで同人入力欄 -->
@@ -147,7 +147,7 @@
         <?php }?>
             <table class="table">
         <thead class="thead-dark">
-        <tr><th>日付け</th><th>優先度</th><th>場所</th><th>番号</th><th>サークル名または作者名</th><th>twitter名</th><th>買うもの</th><th>値段</th><th>削除ボタン</th></tr>
+        <tr><th>日付け</th><th>優先度</th><th>場所</th><th>番号</th><th>サークル名または作者名</th><th>twitter名</th><th>買うもの</th><th>値段</th><th>削除ボタン</th><th>変更ボタン</th></tr>
         <?php foreach($data as $row){ ?>
             <tr>
             <td id="center"><?php echo htmlentities( $row['date'], ENT_QUOTES, 'UTF-8');?>日目</td>
@@ -155,16 +155,26 @@
             <td id="center"><?php echo htmlentities( $row['position_initial'], ENT_QUOTES, 'UTF-8');?></td>
             <td id="center"><?php echo htmlentities( $row['position_number'], ENT_QUOTES, 'UTF-8');?></td>
             <td id="center"><?php echo htmlentities( $row['circle_name'], ENT_QUOTES, 'UTF-8');?></td>
-            <td id="center"><a href="<?php echo htmlentities( $row['twitter'], ENT_QUOTES, 'UTF-8');?>">twitterアカウント<a></td>
+            <td id="center"><a href="<?php echo htmlentities( $row['twitter'], ENT_QUOTES, 'UTF-8');?>"><?php echo htmlentities( $row['twitter'], ENT_QUOTES, 'UTF-8');?></a></td>
             <td id="center"><?php echo htmlentities( $row['target'], ENT_QUOTES, 'UTF-8');?></td>
             <td id="center"><?php echo htmlentities( $row['target_price'], ENT_QUOTES, 'UTF-8');?></td>
             
             <td id="center">
+
             <form action="comic_market_manage.php" method="get">
-            <input type="submit" value="削除する" class="btn btn-primary" data-toggle="button" aria-pressed="false" >
             <input type="hidden" name="id" value="<?=$row['target_id']?>">
+            <input type="submit" value="削除する" class="btn btn-primary">
             </form>    
         </td>
+
+        <td id="center">
+
+            <form action="comic_market_manage_change.php" method="post">
+            <input type="hidden" name="id1" value="<?=$row['target_id']?>">
+            <input type="submit" value="変更する" class="btn btn-primary">
+            </form>    
+        </td>
+
         </tr>
         <?php } ?>        
 
@@ -228,7 +238,7 @@
             
             <td id="center">
             <form action="comic_market_manage.php" method="get">
-            <input type="submit" value="削除する" class="btn btn-primary" data-toggle="button" aria-pressed="false" >
+            <input type="submit" value="削除する" class="btn btn-primary">
             <input type="hidden" name="id" value="<?=$row_company['target_id'] ?>">
             </form>    
         </td>
